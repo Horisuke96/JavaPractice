@@ -30,4 +30,37 @@ public final class Notifier {
 		}
 	}
 	
+	public void send(String user, String message) {
+		List<MobileDevice> devices = new ArrayList<>();
+		synchronized (lock) {
+			if (userMobileDevices.containsKey(user)) {
+				for (MobileDevice device : userMobileDevices.get(user)) {
+					List<String> messageList = messagesToDeliver.get(device);
+						if (messageList == null) {
+							messageList = new ArrayList<>();
+							messagesToDeliver.put(???????);
+						}
+						messageList.add(message);
+						devices.add(device);
+				}
+			}
+		}
+		for (MobileDevice device : devices) {
+			synchronized (devise) {
+				//通知メッセージがあることを待ち受け状態のスレッドに通知
+				device.notifyAll();
+			}
+		}
+	}
+	
+	public void loopForMessages(MobileDevice device) {
+		while (active) {
+			List<String> messageList;
+			synchronized (lock) {
+				messageList = messagesToDeliver.remove(device);
+			}
+		}
+	}
+	
+	
 }
